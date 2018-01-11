@@ -1,0 +1,22 @@
+stages:
+  - build
+
+build-api-docs:
+  image: tetraweb/php:7.1
+  stage: build
+  when: always
+  cache:
+    key: api-docs
+    paths:
+      - build
+      - tmp/pimcore
+      - sami.phar
+  artifacts:
+    name: api-docs
+    expire_in: 1 week
+    paths:
+      - build/static
+  before_script:
+    - scripts/setup.sh
+  script:
+    - scripts/build.sh
