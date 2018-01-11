@@ -1,5 +1,6 @@
 stages:
   - build
+  - deploy
 
 build-api-docs:
   image: tetraweb/php:7.1
@@ -20,3 +21,36 @@ build-api-docs:
     - scripts/setup.sh
   script:
     - scripts/build.sh
+
+deploy-api-docs:
+  image: debian:stable
+  stage: deploy
+  when: manual # <- change this to always to enable auto-deploy after a successful build
+  environment:
+    name: api-docs
+    url: ${DOCS_DEPLOY_BASE_URL}/api
+  only:
+    - master
+  before_script:
+    # test that all env vars are set properly
+    - '[ ! -z "$SSH_PRIVATE_KEY" ]'
+    - '[ ! -z "$SSH_SERVER_HOSTKEYS" ]'
+
+    # install needed packages
+    - '( apt-get update -y && apt-get install openssh-client rsync -y )'
+
+    # See https://docs.gitlab.com/ce/ci/ssh_keys/README.html
+    # to get SSH host keys execute ssh-keyscan <hostname>
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo "$SSH_SERVER_HOSTKEYS" > ~/.ssh/known_hosts && chmod 0644 ~/.ssh/known_hosts'
+  script:
+    # test that all env vars are set properly
+    - '[ ! -z "$DOCS_DEPLOY_USER" ]'
+    - '[ ! -z "$DOCS_DEPLOY_HOST" ]'
+    - '[ ! -z "$DOCS_DEPLOY_PATH" ]'
+
+    - export DOCS_DEPLOY_FULL_PATH=${DOCS_DEPLOY_PATH}/api
+    - ssh ${DOCS_DEPLOY_USER}@${DOCS_DEPLOY_HOST} "mkdir -p ${DOCS_DEPLOY_FULL_PATH}"
+    - rsync -avz --delete build/static/pimcore/ ${DOCS_DEPLOY_USER}@${DOCS_DEPLOY_HOST}:${DOCS_DEPLOY_FULL_PATH}/
