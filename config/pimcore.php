@@ -9,7 +9,7 @@ $getEnvVar = function (string $name, $default = null) {
     return getenv($name) ?: getenv('REDIRECT_' . $name) ?: $default;
 };
 
-$repoPath   = $getEnvVar('DOCS_REPO_PATH', __DIR__ . '/../tmp/repo');
+$repoPath   = $getEnvVar('DOCS_REPO_PATH', __DIR__ . '/../tmp/pimcore');
 $sourcePath = $getEnvVar('DOCS_SOURCE_PATH', $repoPath . '/pimcore');
 $buildPath  = $getEnvVar('DOCS_BUILD_PATH', __DIR__ . '/../build');
 
