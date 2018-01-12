@@ -7,7 +7,7 @@ if [ -d "tmp/pimcore" ]; then
     echo "Updating pimcore in tmp/pimcore"
     (cd tmp/pimcore && git reset -q --hard && git clean -qfd && git fetch -q origin && git checkout -q master && git pull -q origin master)
 else
-    echo "Cloning pimcore to tmp/pimcore"
+    echo "Cloning pimcore into tmp/pimcore"
     git clone -q https://github.com/pimcore/pimcore.git tmp/pimcore
 fi
 
