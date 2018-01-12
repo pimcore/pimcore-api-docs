@@ -9,6 +9,12 @@ With the default config it expects a clone of the `pimcore/pimcore` repository i
 to `build/static/pimcore`. You can change those paths via env variables (see [config/pimcore.php](./config/pimcore.php)).
 
 ```shell
+$ git clone https://github.com/pimcore/pimcore-api-docs.git
+$ cd pimcore-api-docs
+
+# optional, but recommended: use the latest released version (v1.0.3 is just an example, check the repository to get the latest version)
+$ git checkout v1.0.3
+
 # run setup to clone/update the pimcore/pimcore repository and to download the Sami PHAR
 $ scripts/setup.sh
 
