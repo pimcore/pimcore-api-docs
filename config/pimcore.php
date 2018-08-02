@@ -11,7 +11,7 @@ $getEnvVar = function (string $name, $default = null) {
 
 $repoPath   = $getEnvVar('DOCS_REPO_PATH', __DIR__ . '/../tmp/pimcore');
 $sourcePath = $getEnvVar('DOCS_SOURCE_PATH', $repoPath);
-$buildPath  = $getEnvVar('DOCS_BUILD_PATH', __DIR__ . '/../build');
+$buildPath  = $getEnvVar('DOCS_BUILD_PATH', __DIR__ . '/../../build');
 
 $iterator = Finder::create()
     ->files()
